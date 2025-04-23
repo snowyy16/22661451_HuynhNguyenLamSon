@@ -1,41 +1,38 @@
-import React, { useState,useEffect  } from "react";
+// 👉 StudentList.jsx
+import React, { useState, useEffect } from "react";
+import StudentItem from "./StudentItem"; // Import component StudentItem
 
 const StudentList = () => {
-    // 👉 BẮT ĐẦU PHẦN MỚI: Lấy dữ liệu từ localStorage khi load trang
-    const [students, setStudents] = useState(() => {
-      const storedStudents = localStorage.getItem("students");
-      return storedStudents ? JSON.parse(storedStudents) : [];
-    });
-  
-    const [searchTerm, setSearchTerm] = useState("");
-    const [selectedClass, setSelectedClass] = useState("");
-    const [editingId, setEditingId] = useState(null);
-    const [form, setForm] = useState({ name: "", class: "", age: "" });
+  const [students, setStudents] = useState(() => {
+    const storedStudents = localStorage.getItem("students");
+    return storedStudents ? JSON.parse(storedStudents) : [];
+  });
 
-    useEffect(() => {
-        localStorage.setItem("students", JSON.stringify(students));
-      }, [students]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedClass, setSelectedClass] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const [form, setForm] = useState({ name: "", class: "", age: "" });
 
-  // Lọc danh sách sinh viên theo tìm kiếm và lớp
+  useEffect(() => {
+    localStorage.setItem("students", JSON.stringify(students));
+  }, [students]);
+
   const filteredStudents = students.filter((student) => {
     const matchesName = student.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesClass = selectedClass ? student.class === selectedClass : true;
     return matchesName && matchesClass;
   });
 
-  // Hàm thêm sinh viên
   const handleAddStudent = () => {
     const newStudent = { ...form, id: Date.now() };
     setStudents((prev) => [...prev, newStudent]);
     setForm({ name: "", class: "", age: "" });
   };
 
-  // Hàm xóa sinh viên
   const handleDelete = (id) => {
     setStudents((prev) => prev.filter((student) => student.id !== id));
   };
 
-  // Hàm chỉnh sửa thông tin sinh viên
   const handleEdit = (student) => {
     setEditingId(student.id);
     setForm({ name: student.name, class: student.class, age: student.age });
@@ -60,7 +57,7 @@ const StudentList = () => {
     <div className="max-w-2xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Danh sách sinh viên</h1>
       
-      {/* Ô tìm kiếm */}
+      {/* Tìm kiếm */}
       <div className="mb-4">
         <input
           type="text"
@@ -71,7 +68,7 @@ const StudentList = () => {
         />
       </div>
 
-      {/* Dropdown lọc lớp */}
+      {/* Lọc theo lớp */}
       <div className="mb-4">
         <select
           value={selectedClass}
@@ -133,71 +130,12 @@ const StudentList = () => {
         </thead>
         <tbody>
           {filteredStudents.map((student) => (
-            <tr key={student.id} className="border-t border-gray-200">
-              {editingId === student.id ? (
-                <>
-                  <td className="p-2">
-                    <input
-                      name="name"
-                      value={form.name}
-                      onChange={handleChange}
-                      className="border p-1 rounded w-full"
-                    />
-                  </td>
-                  <td className="p-2">
-                    <input
-                      name="class"
-                      value={form.class}
-                      onChange={handleChange}
-                      className="border p-1 rounded w-full"
-                    />
-                  </td>
-                  <td className="p-2">
-                    <input
-                      name="age"
-                      type="number"
-                      value={form.age}
-                      onChange={handleChange}
-                      className="border p-1 rounded w-full"
-                    />
-                  </td>
-                  <td className="p-2 space-x-2">
-                    <button
-                      onClick={() => handleSave(student.id)}
-                      className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
-                    >
-                      Lưu
-                    </button>
-                    <button
-                      onClick={() => setEditingId(null)}
-                      className="bg-gray-400 text-white px-2 py-1 rounded hover:bg-gray-500"
-                    >
-                      Huỷ
-                    </button>
-                  </td>
-                </>
-              ) : (
-                <>
-                  <td className="p-2">{student.name}</td>
-                  <td className="p-2">{student.class}</td>
-                  <td className="p-2">{student.age}</td>
-                  <td className="p-2 space-x-2">
-                    <button
-                      className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-                      onClick={() => handleEdit(student)}
-                    >
-                      Sửa
-                    </button>
-                    <button
-                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                      onClick={() => handleDelete(student.id)}
-                    >
-                      Xoá
-                    </button>
-                  </td>
-                </>
-              )}
-            </tr>
+            <StudentItem
+              key={student.id}
+              student={student}
+              onDelete={handleDelete}
+              onEdit={handleEdit}
+            />
           ))}
         </tbody>
       </table>
