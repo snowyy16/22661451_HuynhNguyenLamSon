@@ -8,6 +8,7 @@ const StudentList = () => {
   ]);
 
   const [form, setForm] = useState({ name: "", class: "", age: "" });
+  const [editingId, setEditingId] = useState(null);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -27,6 +28,20 @@ const StudentList = () => {
   };
   const handleDelete = (id) => {
     setStudents((prev) => prev.filter((student) => student.id !== id));
+  };
+  const handleEdit = (student) => {
+    setEditingId(student.id);
+    setForm({ name: student.name, class: student.class, age: student.age });
+  };
+  
+  const handleSave = (id) => {
+    setStudents((prev) =>
+      prev.map((student) =>
+        student.id === id ? { ...student, ...form, age: parseInt(form.age) } : student
+      )
+    );
+    setEditingId(null);
+    setForm({ name: "", class: "", age: "" });
   };
 
   return (
@@ -74,22 +89,77 @@ const StudentList = () => {
           </tr>
         </thead>
         <tbody>
-          {students.map((student) => (
-            <tr key={student.id} className="border-t border-gray-200">
-              <td className="p-2">{student.name}</td>
-              <td className="p-2">{student.class}</td>
-              <td className="p-2">{student.age}</td>
-              <td className="p-2">
-                <button
-                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                  onClick={() => handleDelete(student.id)}
-                >
-                  Xoá sinh viên
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+  {students.map((student) => (
+    <tr key={student.id} className="border-t border-gray-200">
+      {editingId === student.id ? (
+        // 👉 BẮT ĐẦU PHẦN MỚI: Nếu đang sửa thì hiện input
+        <>
+          <td className="p-2">
+            <input
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              className="border p-1 rounded w-full"
+            />
+          </td>
+          <td className="p-2">
+            <input
+              name="class"
+              value={form.class}
+              onChange={handleChange}
+              className="border p-1 rounded w-full"
+            />
+          </td>
+          <td className="p-2">
+            <input
+              name="age"
+              type="number"
+              value={form.age}
+              onChange={handleChange}
+              className="border p-1 rounded w-full"
+            />
+          </td>
+          <td className="p-2 space-x-2">
+            <button
+              onClick={() => handleSave(student.id)}
+              className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600"
+            >
+              Lưu
+            </button>
+            <button
+              onClick={() => setEditingId(null)}
+              className="bg-gray-400 text-white px-2 py-1 rounded hover:bg-gray-500"
+            >
+              Huỷ
+            </button>
+          </td>
+        </>
+      ) : (
+        // 👉 KẾT THÚC PHẦN MỚI: Hiển thị bình thường nếu không sửa
+        <>
+          <td className="p-2">{student.name}</td>
+          <td className="p-2">{student.class}</td>
+          <td className="p-2">{student.age}</td>
+          <td className="p-2 space-x-2">
+            <button
+              className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+              onClick={() => handleEdit(student)}
+            >
+              Sửa
+            </button>
+            <button
+              className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+              onClick={() => handleDelete(student.id)}
+            >
+              Xoá
+            </button>
+          </td>
+        </>
+      )}
+    </tr>
+  ))}
+</tbody>
+
       </table>
     </div>
   );
