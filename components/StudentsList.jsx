@@ -10,6 +10,8 @@ const StudentList = () => {
   const [form, setForm] = useState({ name: "", class: "", age: "" });
   const [editingId, setEditingId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedClass, setSelectedClass] = useState("");
+  const uniqueClasses = [...new Set(students.map((s) => s.class))];
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -48,6 +50,11 @@ const StudentList = () => {
   const filteredStudents = students.filter((student) =>
   student.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
+  const filteredStudentsAndClass = students.filter((student) => {
+    const matchesName = student.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesClass = selectedClass ? student.class === selectedClass : true;
+    return matchesName && matchesClass;
+  });
   return (
     <div className="max-w-2xl mx-auto p-4">
         <div className="mb-4">
@@ -58,6 +65,20 @@ const StudentList = () => {
     onChange={(e) => setSearchTerm(e.target.value)}
     className="w-full border p-2 rounded"
   />
+</div>
+<div className="mb-4">
+  <select
+    value={selectedClass}
+    onChange={(e) => setSelectedClass(e.target.value)}
+    className="w-full border p-2 rounded"
+  >
+    <option value="">-- Tất cả các lớp --</option>
+    {uniqueClasses.map((cls) => (
+      <option key={cls} value={cls}>
+        {cls}
+      </option>
+    ))}
+  </select>
 </div>
 
       <h1 className="text-2xl font-bold mb-4 ">Danh sách sinh viên</h1>
@@ -103,7 +124,7 @@ const StudentList = () => {
           </tr>
         </thead>
         <tbody>
-  {students.map((student) => (
+  {filteredStudentsAndClass.map((student) => (
     <tr key={student.id} className="border-t border-gray-200">
       {editingId === student.id ? (
         // 👉 BẮT ĐẦU PHẦN MỚI: Nếu đang sửa thì hiện input
