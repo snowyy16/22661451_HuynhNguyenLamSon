@@ -54,8 +54,8 @@ const StudentList = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Danh sách sinh viên</h1>
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-semibold mb-6 text-center">Danh sách sinh viên</h1>
       
       {/* Tìm kiếm */}
       <div className="mb-4">
@@ -64,7 +64,7 @@ const StudentList = () => {
           placeholder="Tìm sinh viên theo tên..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full border p-2 rounded"
+          className="w-full border-2 border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
 
@@ -73,7 +73,7 @@ const StudentList = () => {
         <select
           value={selectedClass}
           onChange={(e) => setSelectedClass(e.target.value)}
-          className="w-full border p-2 rounded"
+          className="w-full border-2 border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="">-- Tất cả các lớp --</option>
           {[...new Set(students.map((s) => s.class))].map((cls) => (
@@ -85,14 +85,14 @@ const StudentList = () => {
       </div>
 
       {/* Thêm sinh viên */}
-      <div className="mb-4">
+      <div className="mb-6">
         <input
           type="text"
           placeholder="Tên"
           name="name"
           value={form.name}
           onChange={handleChange}
-          className="border p-2 rounded w-full"
+          className="border-2 border-gray-300 p-3 rounded-lg w-full mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <input
           type="text"
@@ -100,7 +100,7 @@ const StudentList = () => {
           name="class"
           value={form.class}
           onChange={handleChange}
-          className="border p-2 rounded w-full mt-2"
+          className="border-2 border-gray-300 p-3 rounded-lg w-full mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <input
           type="number"
@@ -108,24 +108,24 @@ const StudentList = () => {
           name="age"
           value={form.age}
           onChange={handleChange}
-          className="border p-2 rounded w-full mt-2"
+          className="border-2 border-gray-300 p-3 rounded-lg w-full mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <button
           onClick={handleAddStudent}
-          className="bg-blue-500 text-white px-4 py-2 rounded mt-2 hover:bg-blue-600"
+          className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
         >
           Thêm sinh viên
         </button>
       </div>
 
       {/* Bảng danh sách sinh viên */}
-      <table className="w-full border border-gray-300 rounded">
+      <table className="min-w-full border-collapse table-auto bg-white shadow-lg rounded-lg overflow-hidden">
         <thead>
-          <tr className="bg-gray-100">
-            <th className="text-left p-2">Tên</th>
-            <th className="text-left p-2">Lớp</th>
-            <th className="text-left p-2">Tuổi</th>
-            <th className="text-left p-2">Hành động</th>
+          <tr className="bg-blue-500 text-white">
+            <th className="text-left p-4">Tên</th>
+            <th className="text-left p-4">Lớp</th>
+            <th className="text-left p-4">Tuổi</th>
+            <th className="text-left p-4">Hành động</th>
           </tr>
         </thead>
         <tbody>
