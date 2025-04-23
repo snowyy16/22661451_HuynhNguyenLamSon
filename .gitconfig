@@ -1,8 +1,0 @@
-[user]
-	name = HuynhNguyenLamSon
-	email = huynhson532004@gmail.com
-[difftool "sourcetree"]
-	cmd = "'' "
-[mergetool "sourcetree"]
-	cmd = "'' "
-	trustExitCode = true
