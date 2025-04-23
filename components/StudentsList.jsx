@@ -9,10 +9,12 @@ const StudentList = () => {
 
   const [form, setForm] = useState({ name: "", class: "", age: "" });
   const [editingId, setEditingId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+  
 
   const handleAdd = () => {
     if (form.name && form.class && form.age) {
@@ -43,10 +45,22 @@ const StudentList = () => {
     setEditingId(null);
     setForm({ name: "", class: "", age: "" });
   };
+  const filteredStudents = students.filter((student) =>
+  student.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
     <div className="max-w-2xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Danh sách sinh viên</h1>
+        <div className="mb-4">
+  <input
+    type="text"
+    placeholder="Tìm sinh viên theo tên..."
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    className="w-full border p-2 rounded"
+  />
+</div>
+
+      <h1 className="text-2xl font-bold mb-4 ">Danh sách sinh viên</h1>
       <div className="mb-6 grid grid-cols-4 gap-2">
         <input
           type="text"
@@ -135,7 +149,6 @@ const StudentList = () => {
           </td>
         </>
       ) : (
-        // 👉 KẾT THÚC PHẦN MỚI: Hiển thị bình thường nếu không sửa
         <>
           <td className="p-2">{student.name}</td>
           <td className="p-2">{student.class}</td>
